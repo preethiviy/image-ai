@@ -55,7 +55,8 @@ export const useAutoResize = ({canvas, container}: UseAutoResizeProps) => {
 
         if(canvas && container){
             resizeObserver = new ResizeObserver(() => {
-                console.log("resizing")
+                // console.log("resizing");
+                autoZoom();
             });
 
             resizeObserver.observe(container);
