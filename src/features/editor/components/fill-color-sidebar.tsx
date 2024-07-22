@@ -1,8 +1,9 @@
 import { cn } from "@/lib/utils";
-import { ActiveTool, Editor } from "../types";
+import { ActiveTool, Editor, FILL_COLOR } from "../types";
 import { ToolSidebarHeader } from "./tool-sidebar-header";
 import { ToolSidebarClose } from "./tool-sidebar-close";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ColorPicker } from "./color-picker";
 
 interface FillColorSidebarProps {
     editor: Editor | undefined;
@@ -15,6 +16,8 @@ export const FillColorSidebar = ({
     activeTool,
     onChangeActiveTool
 }: FillColorSidebarProps) => {
+    const value = editor?.getActiveFillColor() || FILL_COLOR;
+
     const onClose = () => {
         onChangeActiveTool("select");
     };
@@ -33,7 +36,10 @@ export const FillColorSidebar = ({
             />
             <ScrollArea>
                 <div className="p-4 space-y-6">
-                    
+                    <ColorPicker 
+                        value={value}
+                        onChange={onChange}
+                    />
                 </div>
             </ScrollArea>
             <ToolSidebarClose onClick={onClose} />
