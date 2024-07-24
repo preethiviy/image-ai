@@ -27,6 +27,8 @@ const buildEditor = ({
     setStrokeWidth,
     strokeDashArray,
     setStrokeDashArray,
+    opacity,
+    setOpacity,
     selectedObjects
 }: BuildEditorProps): Editor => {
     const getWorkspace = () => {
@@ -227,6 +229,25 @@ const buildEditor = ({
             const workspace = getWorkspace();
             workspace?.sendToBack();
         },
+        changeOpacity: (value: number) => {
+            setOpacity(value);
+            canvas.getActiveObjects().forEach((object) => {
+                object.set({ opacity: value})
+            })
+
+            canvas.renderAll();
+        },
+        getActiveOpacity: () => {
+            const selectedObject = selectedObjects[0];
+
+            if(!selectedObject){
+                return opacity;
+            }
+
+            const value = selectedObject.get("opacity") || opacity;
+            
+            return value;
+        },
         canvas,
         selectedObjects
     };
@@ -242,6 +263,7 @@ export const useEditor = ({
     const [fillColor, setFillColor] = useState(FILL_COLOR);
     const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
     const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
+    const [opacity, setOpacity] = useState(1);
     const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
 
     useAutoResize({
@@ -267,6 +289,8 @@ export const useEditor = ({
                 setStrokeWidth,
                 strokeDashArray,
                 setStrokeDashArray,
+                opacity,
+                setOpacity,
                 selectedObjects
             });
         }
@@ -278,6 +302,7 @@ export const useEditor = ({
         strokeColor,
         strokeWidth,
         strokeDashArray,
+        opacity,
         selectedObjects
     ]);
 

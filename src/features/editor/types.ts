@@ -103,15 +103,17 @@ export type EditorHookProps = {
 
 export type BuildEditorProps = {
     canvas: fabric.Canvas;
+    selectedObjects: fabric.Object[];
     fillColor: string;
     strokeColor: string;
     strokeWidth: number;
     strokeDashArray: number[];
-    selectedObjects: fabric.Object[];
+    opacity: number;
     setFillColor: (value: string) => void;
     setStrokeColor: (value: string) => void;
     setStrokeWidth: (value: number) => void;
     setStrokeDashArray: (value: number[]) => void;
+    setOpacity: (value: number) => void;
 }
 
 export interface Editor {
@@ -125,9 +127,11 @@ export interface Editor {
     changeStrokeColor: (value: string) => void;
     changeStrokeWidth: (value: number) => void;
     changeStrokeDashArray: (value: number[]) => void;
+    changeOpacity: (value: number) => void;
     getActiveFillColor: () => string;
     getActiveStrokeColor: () => string;
     getActiveStrokeWidth: () => number;
+    getActiveOpacity: () => number;
     getActiveStrokeDashArray: () => number[];
     bringForward: () => void;
     sendBackwards: () => void;
