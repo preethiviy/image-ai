@@ -10,6 +10,7 @@ import {
     FILL_COLOR, 
     RECTANGLE_OPTIONS, 
     STROKE_COLOR, 
+    STROKE_DASH_ARRAY, 
     STROKE_WIDTH, 
     TRIANGLE_OPTIONS 
 } from "../types";
@@ -24,6 +25,10 @@ const buildEditor = ({
     setStrokeColor,
     strokeWidth,
     setStrokeWidth,
+    strokeDashArray,
+    setStrokeDashArray,
+    opacity,
+    setOpacity,
     selectedObjects
 }: BuildEditorProps): Editor => {
     const getWorkspace = () => {
@@ -50,7 +55,8 @@ const buildEditor = ({
                 ...CIRCLE_OPTIONS,
                 fill: fillColor,
                 stroke: strokeColor,
-                strokeWidth: strokeWidth
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeDashArray
             });
             addToCanvas(object);
         },
@@ -61,7 +67,8 @@ const buildEditor = ({
                 ry: 50,
                 fill: fillColor,
                 stroke: strokeColor,
-                strokeWidth: strokeWidth
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeDashArray
             });
             addToCanvas(object);
         },
@@ -70,7 +77,8 @@ const buildEditor = ({
                 ...RECTANGLE_OPTIONS,
                 fill: fillColor,
                 stroke: strokeColor,
-                strokeWidth: strokeWidth
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeDashArray
             });
             addToCanvas(object);
         },
@@ -79,7 +87,8 @@ const buildEditor = ({
                 ...TRIANGLE_OPTIONS,
                 fill: fillColor,
                 stroke: strokeColor,
-                strokeWidth: strokeWidth
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeDashArray
             });
             addToCanvas(object);
         },
@@ -96,7 +105,8 @@ const buildEditor = ({
                     ...TRIANGLE_OPTIONS,
                     fill: fillColor,
                     stroke: strokeColor,
-                    strokeWidth: strokeWidth
+                    strokeWidth: strokeWidth,
+                    strokeDashArray: strokeDashArray
                 }
             );
             addToCanvas(object);
@@ -115,7 +125,8 @@ const buildEditor = ({
                     ...DIAMOND_OPTIONS,
                     fill: fillColor,
                     stroke: strokeColor,
-                    strokeWidth: strokeWidth
+                    strokeWidth: strokeWidth,
+                    strokeDashArray: strokeDashArray
                 }
             );
             addToCanvas(object);
@@ -146,6 +157,13 @@ const buildEditor = ({
             });
             canvas.renderAll();
         },
+        changeStrokeDashArray: (value: number[]) => {
+            setStrokeDashArray(value);
+            canvas.getActiveObjects().forEach((object) => {
+                object.set({strokeDashArray: value})
+            });
+            canvas.renderAll();
+        },
         getActiveFillColor: () => {
             const selectedObject = selectedObjects[0];
 
@@ -158,8 +176,78 @@ const buildEditor = ({
             //only strings are supported in the form of rgba
             return value as string;
         },
-        strokeColor,
-        strokeWidth,
+        getActiveStrokeColor: () => {
+            const selectedObject = selectedObjects[0];
+
+            if(!selectedObject){
+                return strokeColor
+            }
+
+            const value = selectedObject.get("stroke") || strokeColor;
+            
+            return value;
+        },
+        getActiveStrokeWidth: () => {
+            const selectedObject = selectedObjects[0];
+
+            if(!selectedObject){
+                return strokeWidth
+            }
+
+            const value = selectedObject.get("strokeWidth") || strokeWidth;
+            
+            return value;
+        },
+        getActiveStrokeDashArray: () => {
+            const selectedObject = selectedObjects[0];
+
+            if(!selectedObject){
+                return strokeDashArray
+            }
+
+            const value = selectedObject.get("strokeDashArray") || strokeDashArray;
+            
+            return value;
+        },
+        bringForward: () => {
+            canvas.getActiveObjects().forEach((object) => {
+                canvas.bringForward(object);
+            })
+
+            canvas.renderAll();
+
+            const workspace = getWorkspace();
+            workspace?.sendToBack();
+        },
+        sendBackwards: () => {
+            canvas.getActiveObjects().forEach((object) => {
+                canvas.sendBackwards(object);
+            })
+
+            canvas.renderAll();
+
+            const workspace = getWorkspace();
+            workspace?.sendToBack();
+        },
+        changeOpacity: (value: number) => {
+            setOpacity(value);
+            canvas.getActiveObjects().forEach((object) => {
+                object.set({ opacity: value})
+            })
+
+            canvas.renderAll();
+        },
+        getActiveOpacity: () => {
+            const selectedObject = selectedObjects[0];
+
+            if(!selectedObject){
+                return opacity;
+            }
+
+            const value = selectedObject.get("opacity") || opacity;
+            
+            return value;
+        },
         canvas,
         selectedObjects
     };
@@ -175,6 +263,8 @@ export const useEditor = ({
     const [fillColor, setFillColor] = useState(FILL_COLOR);
     const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
     const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
+    const [opacity, setOpacity] = useState(1);
+    const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
 
     useAutoResize({
         canvas, 
@@ -197,6 +287,10 @@ export const useEditor = ({
                 setStrokeColor,
                 strokeWidth,
                 setStrokeWidth,
+                strokeDashArray,
+                setStrokeDashArray,
+                opacity,
+                setOpacity,
                 selectedObjects
             });
         }
@@ -207,6 +301,8 @@ export const useEditor = ({
         fillColor,
         strokeColor,
         strokeWidth,
+        strokeDashArray,
+        opacity,
         selectedObjects
     ]);
 
