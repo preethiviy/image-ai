@@ -129,6 +129,8 @@ export interface Editor {
     getActiveStrokeColor: () => string;
     getActiveStrokeWidth: () => number;
     getActiveStrokeDashArray: () => number[];
+    bringForward: () => void;
+    sendBackwards: () => void;
     canvas: fabric.Canvas;
     selectedObjects: fabric.Object[];
 }
