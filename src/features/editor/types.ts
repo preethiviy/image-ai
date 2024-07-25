@@ -32,7 +32,28 @@ export const colors = [
     material.brown["500"],
     material.blueGrey["500"],
     "transparent",
-  ];
+];
+
+export const fonts = [
+    "Arial",
+    "Arial Black",
+    "Verdana",
+    "Helvetica",
+    "Tahoma",
+    "Trebuchet MS",
+    "Times New Roman",
+    "Georgia",
+    "Garamond",
+    "Courier New",
+    "Brush Script MT",
+    "Palatino",
+    "Bookman",
+    "Comic Sans MS",
+    "Impact",
+    "Lucida Sans Unicode",
+    "Geneva",
+    "Lucida Console",
+];
 
 export type ActiveTool = 
     "select" 
@@ -121,11 +142,13 @@ export type BuildEditorProps = {
     strokeWidth: number;
     strokeDashArray: number[];
     opacity: number;
+    fontFamily: string;
     setFillColor: (value: string) => void;
     setStrokeColor: (value: string) => void;
     setStrokeWidth: (value: number) => void;
     setStrokeDashArray: (value: number[]) => void;
     setOpacity: (value: number) => void;
+    setFontFamily: (value: string) => void;
 }
 
 export interface Editor {
@@ -141,11 +164,13 @@ export interface Editor {
     changeStrokeWidth: (value: number) => void;
     changeStrokeDashArray: (value: number[]) => void;
     changeOpacity: (value: number) => void;
+    changeFontFamily: (value: string) => void;
     getActiveFillColor: () => string;
     getActiveStrokeColor: () => string;
     getActiveStrokeWidth: () => number;
     getActiveStrokeDashArray: () => number[];
     getActiveOpacity: () => number;
+    getActiveFontFamily: () => string;
     bringForward: () => void;
     sendBackwards: () => void;
     canvas: fabric.Canvas;

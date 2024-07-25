@@ -8,6 +8,7 @@ import {
     Editor, 
     EditorHookProps, 
     FILL_COLOR, 
+    FONT_FAMILY, 
     RECTANGLE_OPTIONS, 
     STROKE_COLOR, 
     STROKE_DASH_ARRAY, 
@@ -30,6 +31,8 @@ const buildEditor = ({
     setStrokeDashArray,
     opacity,
     setOpacity,
+    fontFamily,
+    setFontFamily,
     selectedObjects
 }: BuildEditorProps): Editor => {
     const getWorkspace = () => {
@@ -181,6 +184,16 @@ const buildEditor = ({
 
             canvas.renderAll();
         },
+        changeFontFamily: (value: string) => {
+            setFontFamily(value);
+            canvas.getActiveObjects().forEach((object) => {
+                if(isTextType(object.type)){
+                    //@ts-ignore
+                    object.set({ fontFamily: value});
+                }
+            });
+            canvas.renderAll();
+        },
         getActiveFillColor: () => {
             const selectedObject = selectedObjects[0];
 
@@ -237,6 +250,18 @@ const buildEditor = ({
             
             return value;
         },
+        getActiveFontFamily: () => {
+            const selectedObject = selectedObjects[0];
+
+            if(!selectedObject){
+                return fontFamily
+            }
+
+            //@ts-ignore
+            const value = selectedObject.get("fontFamily") || fontFamily;
+
+            return value;
+        },
         bringForward: () => {
             canvas.getActiveObjects().forEach((object) => {
                 canvas.bringForward(object);
@@ -274,6 +299,7 @@ export const useEditor = ({
     const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
     const [opacity, setOpacity] = useState(1);
     const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
+    const [fontFamily, setFontFamily] = useState(FONT_FAMILY);
 
     useAutoResize({
         canvas, 
@@ -300,7 +326,9 @@ export const useEditor = ({
                 setStrokeDashArray,
                 opacity,
                 setOpacity,
-                selectedObjects
+                selectedObjects,
+                fontFamily,
+                setFontFamily
             });
         }
 
@@ -312,6 +340,7 @@ export const useEditor = ({
         strokeWidth,
         strokeDashArray,
         opacity,
+        fontFamily,
         selectedObjects
     ]);
 
