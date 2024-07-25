@@ -9,6 +9,8 @@ import {
     EditorHookProps, 
     FILL_COLOR, 
     FONT_FAMILY, 
+    FONT_STYLE, 
+    FONT_WEIGHT, 
     RECTANGLE_OPTIONS, 
     STROKE_COLOR, 
     STROKE_DASH_ARRAY, 
@@ -33,6 +35,16 @@ const buildEditor = ({
     setOpacity,
     fontFamily,
     setFontFamily,
+    fontWeight,
+    setFontWeight,
+    fontStyle,
+    setFontStyle,
+    fontLinethrough,
+    setFontLinethrough,
+    fontUnderline,
+    setFontUnderline,
+    textAlign,
+    setTextAlign,
     selectedObjects
 }: BuildEditorProps): Editor => {
     const getWorkspace = () => {
@@ -194,6 +206,61 @@ const buildEditor = ({
             });
             canvas.renderAll();
         },
+        changeFontWeight: (value: number) => {
+            setFontWeight(value);
+            canvas.getActiveObjects().forEach((object) => {
+                if(isTextType(object.type)){
+                    //@ts-ignore
+                    object.set({ fontWeight: value})
+                }
+            })
+
+            canvas.renderAll();
+        },
+        changeFontStyle: (value) => {
+            setFontStyle(value);
+            canvas.getActiveObjects().forEach((object) => {
+                if(isTextType(object.type)){
+                    //@ts-ignore
+                    object.set({ fontStyle: value})
+                }
+            })
+
+            canvas.renderAll();
+        },
+        changeFontLinethrough: (value) => {
+            setFontLinethrough(value);
+            canvas.getActiveObjects().forEach((object) => {
+                if(isTextType(object.type)){
+                    //@ts-ignore
+                    object.set({ linethrough: value})
+                }
+            })
+
+            canvas.renderAll();
+        },
+        changeFontUnderline: (value) => {
+            setFontUnderline(value);
+            canvas.getActiveObjects().forEach((object) => {
+                if(isTextType(object.type)){
+                    //@ts-ignore
+                    object.set({ underline: value})
+                }
+            })
+
+            canvas.renderAll();
+        },
+        changeTextAlign: (value) => {
+            // setFontUnderline(value);
+            canvas.getActiveObjects().forEach((object) => {
+                if(isTextType(object.type)){
+                    //@ts-ignore
+                    object.set({ textAlign: value})
+                }
+            })
+
+            canvas.renderAll();
+        },
         getActiveFillColor: () => {
             const selectedObject = selectedObjects[0];
 
@@ -262,6 +329,66 @@ const buildEditor = ({
 
             return value;
         },
+        getActiveFontWeight: () => {
+            const selectedObject = selectedObjects[0];
+
+            if(!selectedObject){
+                return fontWeight
+            }
+
+            //@ts-ignore
+            const value = selectedObject.get("fontWeight") || fontWeight;
+            
+            return value;
+        },
+        getActiveFontStyle: () => {
+            const selectedObject = selectedObjects[0];
+
+            if(!selectedObject){
+                return fontStyle
+            }
+
+            //@ts-ignore
+            const value = selectedObject.get("fontStyle") || fontStyle;
+            
+            return value;
+        },
+        getActiveFontLinethrough: () => {
+            const selectedObject = selectedObjects[0];
+
+            if(!selectedObject){
+                return fontLinethrough
+            }
+
+            //@ts-ignore
+            const value = selectedObject.get("linethrough") || fontLinethrough;
+            
+            return value;
+        },
+        getActiveFontUnderline: () => {
+            const selectedObject = selectedObjects[0];
+
+            if(!selectedObject){
+                return fontUnderline
+            }
+
+            //@ts-ignore
+            const value = selectedObject.get("underline") || fontUnderline;
+            
+            return value;
+        },
+        getActiveTextAlign: () => {
+            const selectedObject = selectedObjects[0];
+
+            if(!selectedObject){
+                return "left"
+            }
+
+            //@ts-ignore
+            const value = selectedObject.get("textAlign") || "left";
+            
+            return value;
+        },
         bringForward: () => {
             canvas.getActiveObjects().forEach((object) => {
                 canvas.bringForward(object);
@@ -298,8 +425,13 @@ export const useEditor = ({
     const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
     const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
     const [opacity, setOpacity] = useState(1);
+    const [fontWeight, setFontWeight] = useState(FONT_WEIGHT);
     const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
     const [fontFamily, setFontFamily] = useState(FONT_FAMILY);
+    const [fontStyle, setFontStyle] = useState(FONT_STYLE);
+    const [fontLinethrough, setFontLinethrough] = useState(false);
+    const [fontUnderline, setFontUnderline] = useState(false);
+    const [textAlign, setTextAlign] = useState("left");
 
     useAutoResize({
         canvas, 
@@ -328,7 +460,17 @@ export const useEditor = ({
                 setOpacity,
                 selectedObjects,
                 fontFamily,
-                setFontFamily
+                setFontFamily,
+                fontWeight,
+                setFontWeight,
+                fontStyle,
+                setFontStyle,
+                fontLinethrough,
+                setFontLinethrough,
+                fontUnderline,
+                setFontUnderline,
+                textAlign,
+                setTextAlign
             });
         }
 
@@ -341,6 +483,11 @@ export const useEditor = ({
         strokeDashArray,
         opacity,
         fontFamily,
+        fontWeight,
+        fontStyle,
+        fontLinethrough,
+        fontUnderline,
+        textAlign,
         selectedObjects
     ]);
 

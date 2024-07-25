@@ -78,6 +78,8 @@ export const STROKE_WIDTH = 2;
 export const STROKE_DASH_ARRAY = [];
 export const FONT_FAMILY = "Arial";
 export const FONT_SIZE = 32;
+export const FONT_WEIGHT = 400;
+export const FONT_STYLE = "normal";
 
 export const CIRCLE_OPTIONS = {
     radius: 225,
@@ -143,12 +145,22 @@ export type BuildEditorProps = {
     strokeDashArray: number[];
     opacity: number;
     fontFamily: string;
+    fontWeight: number;
+    fontStyle: string;
+    fontLinethrough: boolean;
+    fontUnderline: boolean;
+    textAlign: string;
     setFillColor: (value: string) => void;
     setStrokeColor: (value: string) => void;
     setStrokeWidth: (value: number) => void;
     setStrokeDashArray: (value: number[]) => void;
     setOpacity: (value: number) => void;
     setFontFamily: (value: string) => void;
+    setFontWeight: (value: number) => void;
+    setFontStyle: (value: string) => void;
+    setFontLinethrough: (value: boolean) => void;
+    setFontUnderline: (value: boolean) => void;
+    setTextAlign: (value: string) => void;
 }
 
 export interface Editor {
@@ -165,12 +177,22 @@ export interface Editor {
     changeStrokeDashArray: (value: number[]) => void;
     changeOpacity: (value: number) => void;
     changeFontFamily: (value: string) => void;
+    changeFontWeight: (value: number) => void;
+    changeFontStyle: (value: string) => void;
+    changeFontLinethrough: (value: boolean) => void;
+    changeFontUnderline: (value: boolean) => void;
+    changeTextAlign: (value: ITextboxOptions["textAlign"]) => void;
     getActiveFillColor: () => string;
     getActiveStrokeColor: () => string;
     getActiveStrokeWidth: () => number;
     getActiveStrokeDashArray: () => number[];
     getActiveOpacity: () => number;
     getActiveFontFamily: () => string;
+    getActiveFontWeight: () => number;
+    getActiveFontStyle: () => string;
+    getActiveFontLinethrough: () => boolean;
+    getActiveFontUnderline: () => boolean;
+    getActiveTextAlign: () => string;
     bringForward: () => void;
     sendBackwards: () => void;
     canvas: fabric.Canvas;
