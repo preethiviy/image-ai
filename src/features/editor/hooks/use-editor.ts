@@ -12,6 +12,7 @@ import {
     STROKE_COLOR, 
     STROKE_DASH_ARRAY, 
     STROKE_WIDTH, 
+    TEXT_OPTIONS, 
     TRIANGLE_OPTIONS 
 } from "../types";
 import { useCanvasEvents } from "./use-canvas-events";
@@ -131,6 +132,14 @@ const buildEditor = ({
             );
             addToCanvas(object);
         },
+        addText: (value, options) => {
+            const object = new fabric.Textbox(value, {
+                ...TEXT_OPTIONS,
+                fill: fillColor,
+                ...options
+            });
+            addToCanvas(object);
+        },
         changeFillColor: (value: string) => {
             setFillColor(value);
             canvas.getActiveObjects().forEach((object) => {
@@ -162,6 +171,14 @@ const buildEditor = ({
             canvas.getActiveObjects().forEach((object) => {
                 object.set({strokeDashArray: value})
             });
+            canvas.renderAll();
+        },
+        changeOpacity: (value: number) => {
+            setOpacity(value);
+            canvas.getActiveObjects().forEach((object) => {
+                object.set({ opacity: value})
+            })
+
             canvas.renderAll();
         },
         getActiveFillColor: () => {
@@ -209,6 +226,17 @@ const buildEditor = ({
             
             return value;
         },
+        getActiveOpacity: () => {
+            const selectedObject = selectedObjects[0];
+
+            if(!selectedObject){
+                return opacity;
+            }
+
+            const value = selectedObject.get("opacity") || opacity;
+            
+            return value;
+        },
         bringForward: () => {
             canvas.getActiveObjects().forEach((object) => {
                 canvas.bringForward(object);
@@ -228,25 +256,6 @@ const buildEditor = ({
 
             const workspace = getWorkspace();
             workspace?.sendToBack();
-        },
-        changeOpacity: (value: number) => {
-            setOpacity(value);
-            canvas.getActiveObjects().forEach((object) => {
-                object.set({ opacity: value})
-            })
-
-            canvas.renderAll();
-        },
-        getActiveOpacity: () => {
-            const selectedObject = selectedObjects[0];
-
-            if(!selectedObject){
-                return opacity;
-            }
-
-            const value = selectedObject.get("opacity") || opacity;
-            
-            return value;
         },
         canvas,
         selectedObjects
