@@ -9,6 +9,7 @@ import {
     EditorHookProps, 
     FILL_COLOR, 
     FONT_FAMILY, 
+    FONT_SIZE, 
     FONT_STYLE, 
     FONT_WEIGHT, 
     RECTANGLE_OPTIONS, 
@@ -45,6 +46,8 @@ const buildEditor = ({
     setFontUnderline,
     textAlign,
     setTextAlign,
+    fontSize, 
+    setFontSize,
     selectedObjects
 }: BuildEditorProps): Editor => {
     const getWorkspace = () => {
@@ -251,11 +254,22 @@ const buildEditor = ({
             canvas.renderAll();
         },
         changeTextAlign: (value) => {
-            // setFontUnderline(value);
+            setTextAlign(value);
             canvas.getActiveObjects().forEach((object) => {
                 if(isTextType(object.type)){
                     //@ts-ignore
                     object.set({ textAlign: value})
+                }
+            })
+
+            canvas.renderAll();
+        },
+        changeFontSize: (value) => {
+            setFontSize(value);
+            canvas.getActiveObjects().forEach((object) => {
+                if(isTextType(object.type)){
+                    //@ts-ignore
+                    object.set({ fontSize: value})
                 }
             })
 
@@ -381,11 +395,23 @@ const buildEditor = ({
             const selectedObject = selectedObjects[0];
 
             if(!selectedObject){
-                return "left"
+                return textAlign
             }
 
             //@ts-ignore
-            const value = selectedObject.get("textAlign") || "left";
+            const value = selectedObject.get("textAlign") || textAlign;
+            
+            return value;
+        },
+        getActiveFontSize: () => {
+            const selectedObject = selectedObjects[0];
+
+            if(!selectedObject){
+                return fontSize
+            }
+
+            //@ts-ignore
+            const value = selectedObject.get("fontSize") || fontSize;
             
             return value;
         },
@@ -432,6 +458,7 @@ export const useEditor = ({
     const [fontLinethrough, setFontLinethrough] = useState(false);
     const [fontUnderline, setFontUnderline] = useState(false);
     const [textAlign, setTextAlign] = useState("left");
+    const [fontSize, setFontSize] = useState(FONT_SIZE);
 
     useAutoResize({
         canvas, 
@@ -470,7 +497,9 @@ export const useEditor = ({
                 fontUnderline,
                 setFontUnderline,
                 textAlign,
-                setTextAlign
+                setTextAlign,
+                fontSize,
+                setFontSize
             });
         }
 
@@ -488,6 +517,7 @@ export const useEditor = ({
         fontLinethrough,
         fontUnderline,
         textAlign,
+        fontSize,
         selectedObjects
     ]);
 

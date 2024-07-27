@@ -150,6 +150,7 @@ export type BuildEditorProps = {
     fontLinethrough: boolean;
     fontUnderline: boolean;
     textAlign: string;
+    fontSize: number;
     setFillColor: (value: string) => void;
     setStrokeColor: (value: string) => void;
     setStrokeWidth: (value: number) => void;
@@ -161,6 +162,7 @@ export type BuildEditorProps = {
     setFontLinethrough: (value: boolean) => void;
     setFontUnderline: (value: boolean) => void;
     setTextAlign: (value: string) => void;
+    setFontSize: (value: number) => void;
 }
 
 export interface Editor {
@@ -181,7 +183,8 @@ export interface Editor {
     changeFontStyle: (value: string) => void;
     changeFontLinethrough: (value: boolean) => void;
     changeFontUnderline: (value: boolean) => void;
-    changeTextAlign: (value: ITextboxOptions["textAlign"]) => void;
+    changeTextAlign: (value: string) => void;
+    changeFontSize: (value: number) => void;
     getActiveFillColor: () => string;
     getActiveStrokeColor: () => string;
     getActiveStrokeWidth: () => number;
@@ -193,6 +196,7 @@ export interface Editor {
     getActiveFontLinethrough: () => boolean;
     getActiveFontUnderline: () => boolean;
     getActiveTextAlign: () => string;
+    getActiveFontSize: () => number;
     bringForward: () => void;
     sendBackwards: () => void;
     canvas: fabric.Canvas;
