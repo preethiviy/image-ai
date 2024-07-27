@@ -173,6 +173,7 @@ export interface Editor {
     addInverseTriangle: () => void;
     addDiamond: () => void;
     addText: (value: string, options?: ITextboxOptions) => void;
+    delete: () => void;
     changeFillColor: (value: string) => void;
     changeStrokeColor: (value: string) => void;
     changeStrokeWidth: (value: number) => void;
