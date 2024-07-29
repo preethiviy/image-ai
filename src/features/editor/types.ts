@@ -174,6 +174,7 @@ export interface Editor {
     addDiamond: () => void;
     addText: (value: string, options?: ITextboxOptions) => void;
     delete: () => void;
+    addImage: (value: string) => void;
     changeFillColor: (value: string) => void;
     changeStrokeColor: (value: string) => void;
     changeStrokeWidth: (value: number) => void;

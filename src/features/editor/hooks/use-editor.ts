@@ -165,6 +165,21 @@ const buildEditor = ({
             canvas.discardActiveObject();
             canvas.renderAll();
         },
+        addImage: (value: string) => {
+            fabric.Image.fromURL(
+                value,
+                (image) => {
+                    const workspace = getWorkspace();
+                    image.scaleToWidth(workspace?.width || 0);
+                    image.scaleToHeight(workspace?.height || 0);
+
+                    addToCanvas(image);
+                },
+                {
+                    crossOrigin: "anonymous"
+                }
+            )
+        },
         changeFillColor: (value: string) => {
             setFillColor(value);
             canvas.getActiveObjects().forEach((object) => {
