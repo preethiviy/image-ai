@@ -55,6 +55,32 @@ export const fonts = [
     "Lucida Console",
 ];
 
+export const filters = [
+    "none",
+    "polaroid",
+    "sepia",
+    "kodachrome",
+    "contrast",
+    "brightness",
+    "greyscale",
+    "brownie",
+    "vintage",
+    "technicolor",
+    "pixelate",
+    "invert",
+    "blur",
+    "sharpen",
+    "emboss",
+    "removecolor",
+    "blacknwhite",
+    "vibrance",
+    "blendcolor",
+    "huerotate",
+    "resize",
+    "saturation",
+    "gamma",
+];
+
 export type ActiveTool = 
     "select" 
     | "shapes"
@@ -187,6 +213,7 @@ export interface Editor {
     changeFontUnderline: (value: boolean) => void;
     changeTextAlign: (value: string) => void;
     changeFontSize: (value: number) => void;
+    changeImageFilter: (value: string) => void;
     getActiveFillColor: () => string;
     getActiveStrokeColor: () => string;
     getActiveStrokeWidth: () => number;

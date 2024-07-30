@@ -20,7 +20,7 @@ import {
     TRIANGLE_OPTIONS 
 } from "../types";
 import { useCanvasEvents } from "./use-canvas-events";
-import { isTextType } from "../utils";
+import { createFilter, isTextType } from "../utils";
 
 const buildEditor = ({
     canvas,
@@ -292,6 +292,21 @@ const buildEditor = ({
                 if(isTextType(object.type)){
                     //@ts-ignore
                     object.set({ fontSize: value})
+                }
+            })
+
+            canvas.renderAll();
+        },
+        changeImageFilter: (value) => {
+            // setFontSize(value);
+            canvas.getActiveObjects().forEach((object) => {
+                if(object.type === "image"){
+                    const imageObject = object as fabric.Image;
+                    const effect = createFilter(value);
+
+                    imageObject.filters = effect ? [effect] : [];
+                    imageObject.applyFilters();
+                    canvas.renderAll();
                 }
             })
 
