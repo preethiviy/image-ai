@@ -6,10 +6,20 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { BsBorderWidth } from "react-icons/bs";
 import { RxTransparencyGrid } from "react-icons/rx";
-import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ChevronDown, Trash } from "lucide-react";
+import { AlignCenter, 
+    AlignLeft, 
+    AlignRight, 
+    ArrowDown, 
+    ArrowUp, 
+    ChevronDown, 
+    Trash, 
+    SquareSplitHorizontal, 
+    Copy
+} from "lucide-react";
 import { isTextType } from "../utils";
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
 import { FontSizeInput } from "./font-size-input";
+import { TbColorFilter } from "react-icons/tb";
 
 interface ToolbarProps {
     editor: Editor | undefined;
@@ -48,6 +58,7 @@ export const Toolbar = ({
     // });
 
     const isSelectedText = isTextType(selectedObjectType);
+    const isSelectedImage = selectedObjectType === "image";
 
     const toggleBold = () => {
         if(!selectedObject) return;
@@ -99,25 +110,28 @@ export const Toolbar = ({
 
     return (
         <div className="shrink-0 h-[56px] border-b bg-white w-full flex items-center overflow-x-auto z-[49] p-2 gap-x-2">
-            <div className="flex items-center h-full justify-center">
-                <Hint label="Color" side="bottom" sideOffset={5}>
-                    <Button
-                        onClick={() => onChangeActiveTool("fill")}
-                        size="icon"
-                        variant="ghost"
-                        className={cn(
-                            activeTool === "fill" && "bg-gray-100"
-                        )}
-                    >
-                        <div 
-                            className="rounded-sm size-4 border"
-                            style={{
-                                backgroundColor: fillColor
-                            }}
-                        />
-                    </Button>
-                </Hint>
-            </div>
+            {
+                !isSelectedImage &&
+                <div className="flex items-center h-full justify-center">
+                    <Hint label="Color" side="bottom" sideOffset={5}>
+                        <Button
+                            onClick={() => onChangeActiveTool("fill")}
+                            size="icon"
+                            variant="ghost"
+                            className={cn(
+                                activeTool === "fill" && "bg-gray-100"
+                            )}
+                        >
+                            <div 
+                                className="rounded-sm size-4 border"
+                                style={{
+                                    backgroundColor: fillColor
+                                }}
+                            />
+                        </Button>
+                    </Hint>
+                </div>
+            }
             {
                 !isSelectedText && (
                     <div className="flex items-center h-full justify-center">
@@ -309,6 +323,40 @@ export const Toolbar = ({
                     />
                 </div>
             }
+            {   
+                isSelectedImage &&
+                <div className="flex items-center h-full justify-center">
+                    <Hint label="Filters" side="bottom" sideOffset={5}>
+                        <Button
+                            onClick={() => onChangeActiveTool("filter")}
+                            size="icon"
+                            variant="ghost"
+                            className={cn(
+                                activeTool === "filter" && "bg-gray-100"
+                            )}
+                        >
+                            <TbColorFilter className="size-4" />
+                        </Button>
+                    </Hint>
+                </div>
+            }
+            {   
+                isSelectedImage &&
+                <div className="flex items-center h-full justify-center">
+                    <Hint label="Remove background" side="bottom" sideOffset={5}>
+                        <Button
+                            onClick={() => onChangeActiveTool("remove-bg")}
+                            size="icon"
+                            variant="ghost"
+                            className={cn(
+                                activeTool === "remove-bg" && "bg-gray-100"
+                            )}
+                        >
+                            <SquareSplitHorizontal className="size-4" />
+                        </Button>
+                    </Hint>
+                </div>
+            }
             <div className="flex items-center h-full justify-center">
                 <Hint label="Bring forward" side="bottom" sideOffset={5}>
                     <Button
@@ -353,6 +401,20 @@ export const Toolbar = ({
                         variant="ghost"
                     >
                         <Trash className="size-4" />
+                    </Button>
+                </Hint>
+            </div>
+            <div className="flex items-center h-full justify-center">
+                <Hint label="Duplicate" side="bottom" sideOffset={5}>
+                    <Button
+                        onClick={() => {
+                            editor?.onCopy();
+                            editor?.onPaste();
+                        }}
+                        size="icon"
+                        variant="ghost"
+                    >
+                        <Copy className="size-4" />
                     </Button>
                 </Hint>
             </div>

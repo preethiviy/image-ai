@@ -20,7 +20,8 @@ import {
     TRIANGLE_OPTIONS 
 } from "../types";
 import { useCanvasEvents } from "./use-canvas-events";
-import { isTextType } from "../utils";
+import { createFilter, isTextType } from "../utils";
+import { useClipboard } from "./use-clipboard";
 
 const buildEditor = ({
     canvas,
@@ -48,7 +49,9 @@ const buildEditor = ({
     setTextAlign,
     fontSize, 
     setFontSize,
-    selectedObjects
+    selectedObjects,
+    copy, 
+    paste
 }: BuildEditorProps): Editor => {
     const getWorkspace = () => {
         return canvas.getObjects().find((object) => object.name === "clip");
@@ -297,6 +300,21 @@ const buildEditor = ({
 
             canvas.renderAll();
         },
+        changeImageFilter: (value) => {
+            // setFontSize(value);
+            canvas.getActiveObjects().forEach((object) => {
+                if(object.type === "image"){
+                    const imageObject = object as fabric.Image;
+                    const effect = createFilter(value);
+
+                    imageObject.filters = effect ? [effect] : [];
+                    imageObject.applyFilters();
+                    canvas.renderAll();
+                }
+            })
+
+            canvas.renderAll();
+        },
         getActiveFillColor: () => {
             const selectedObject = selectedObjects[0];
 
@@ -458,7 +476,9 @@ const buildEditor = ({
             workspace?.sendToBack();
         },
         canvas,
-        selectedObjects
+        selectedObjects,
+        onCopy: () => copy(),
+        onPaste: () => paste(),
     };
 }
 
@@ -481,6 +501,10 @@ export const useEditor = ({
     const [fontUnderline, setFontUnderline] = useState(false);
     const [textAlign, setTextAlign] = useState("left");
     const [fontSize, setFontSize] = useState(FONT_SIZE);
+
+    const {copy, paste} = useClipboard({
+        canvas
+    });
 
     useAutoResize({
         canvas, 
@@ -521,7 +545,9 @@ export const useEditor = ({
                 textAlign,
                 setTextAlign,
                 fontSize,
-                setFontSize
+                setFontSize,
+                copy, 
+                paste
             });
         }
 
