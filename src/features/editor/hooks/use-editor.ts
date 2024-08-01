@@ -21,6 +21,7 @@ import {
 } from "../types";
 import { useCanvasEvents } from "./use-canvas-events";
 import { createFilter, isTextType } from "../utils";
+import { useClipboard } from "./use-clipboard";
 
 const buildEditor = ({
     canvas,
@@ -48,7 +49,9 @@ const buildEditor = ({
     setTextAlign,
     fontSize, 
     setFontSize,
-    selectedObjects
+    selectedObjects,
+    copy, 
+    paste
 }: BuildEditorProps): Editor => {
     const getWorkspace = () => {
         return canvas.getObjects().find((object) => object.name === "clip");
@@ -473,7 +476,9 @@ const buildEditor = ({
             workspace?.sendToBack();
         },
         canvas,
-        selectedObjects
+        selectedObjects,
+        onCopy: () => copy(),
+        onPaste: () => paste(),
     };
 }
 
@@ -496,6 +501,10 @@ export const useEditor = ({
     const [fontUnderline, setFontUnderline] = useState(false);
     const [textAlign, setTextAlign] = useState("left");
     const [fontSize, setFontSize] = useState(FONT_SIZE);
+
+    const {copy, paste} = useClipboard({
+        canvas
+    });
 
     useAutoResize({
         canvas, 
@@ -536,7 +545,9 @@ export const useEditor = ({
                 textAlign,
                 setTextAlign,
                 fontSize,
-                setFontSize
+                setFontSize,
+                copy, 
+                paste
             });
         }
 

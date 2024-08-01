@@ -165,6 +165,8 @@ export type EditorHookProps = {
 export type BuildEditorProps = {
     canvas: fabric.Canvas;
     selectedObjects: fabric.Object[];
+    copy: () => void;
+    paste: () => void;
     fillColor: string;
     strokeColor: string;
     strokeWidth: number;
@@ -230,4 +232,6 @@ export interface Editor {
     sendBackwards: () => void;
     canvas: fabric.Canvas;
     selectedObjects: fabric.Object[];
+    onCopy: () => void;
+    onPaste: () => void;
 }
