@@ -234,4 +234,6 @@ export interface Editor {
     selectedObjects: fabric.Object[];
     onCopy: () => void;
     onPaste: () => void;
+    enableDrawingMode: () => void;
+    disableDrawingMode: () => void;
 }
