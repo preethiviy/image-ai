@@ -51,7 +51,8 @@ const buildEditor = ({
     setFontSize,
     selectedObjects,
     copy, 
-    paste
+    paste,
+    autoZoom
 }: BuildEditorProps): Editor => {
     const getWorkspace = () => {
         return canvas.getObjects().find((object) => object.name === "clip");
@@ -490,7 +491,19 @@ const buildEditor = ({
         },
         disableDrawingMode: () => {
             canvas.isDrawingMode = true;
-        }
+        },
+        changeSize: (size: {width: number; height: number}) => {
+            const workspace = getWorkspace();
+
+            workspace?.set(size);
+            autoZoom();
+        },
+        changeBackground: (value: string) => {
+            const workspace = getWorkspace();
+            workspace?.set({fill: value});
+            canvas.renderAll();
+        }, 
+        getWorkspace
     };
 }
 
@@ -518,7 +531,7 @@ export const useEditor = ({
         canvas
     });
 
-    useAutoResize({
+    const { autoZoom } = useAutoResize({
         canvas, 
         container
     });
@@ -559,7 +572,8 @@ export const useEditor = ({
                 fontSize,
                 setFontSize,
                 copy, 
-                paste
+                paste,
+                autoZoom
             });
         }
 
@@ -578,7 +592,8 @@ export const useEditor = ({
         fontUnderline,
         textAlign,
         fontSize,
-        selectedObjects
+        selectedObjects,
+        autoZoom
     ]);
 
     const init = useCallback(({
