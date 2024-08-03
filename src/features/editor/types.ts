@@ -191,6 +191,7 @@ export type BuildEditorProps = {
     setFontUnderline: (value: boolean) => void;
     setTextAlign: (value: string) => void;
     setFontSize: (value: number) => void;
+    autoZoom: () => void;
 }
 
 export interface Editor {
@@ -234,4 +235,9 @@ export interface Editor {
     selectedObjects: fabric.Object[];
     onCopy: () => void;
     onPaste: () => void;
+    enableDrawingMode: () => void;
+    disableDrawingMode: () => void;
+    changeSize: (value: {width: number; height: number}) => void;
+    changeBackground: (value: string) => void;
+    getWorkspace: () => fabric.Object | undefined;
 }
