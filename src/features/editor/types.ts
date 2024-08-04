@@ -240,4 +240,7 @@ export interface Editor {
     changeSize: (value: {width: number; height: number}) => void;
     changeBackground: (value: string) => void;
     getWorkspace: () => fabric.Object | undefined;
+    zoomIn: () => void;
+    zoomOut: () => void;
+    autoZoom: () => void;
 }

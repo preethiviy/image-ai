@@ -163,7 +163,7 @@ export const Editor = () => {
                     <div ref={containerRef} className="flex-1 h-[calc(100%-124px)] bg-muted">
                         <canvas ref={canvasRef} />
                     </div>
-                    <Footer />
+                    <Footer editor={editor} />
                 </main>
             </div>
         </div>
