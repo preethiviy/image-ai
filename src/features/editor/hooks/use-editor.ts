@@ -21,10 +21,11 @@ import {
     TRIANGLE_OPTIONS 
 } from "../types";
 import { useCanvasEvents } from "./use-canvas-events";
-import { createFilter, isTextType } from "../utils";
+import { createFilter, downloadFile, isTextType, transformText } from "../utils";
 import { useClipboard } from "./use-clipboard";
 import { useHistory } from "./use-history";
 import { useHotkeys } from "./use-hotkeys";
+import { useWindowEvents } from "./use-window-events";
 
 const buildEditor = ({
     canvas,
@@ -78,6 +79,68 @@ const buildEditor = ({
         center(object);
         canvas.add(object);
         canvas.setActiveObject(object);
+    }
+
+    const generateSaveOptions = () => {
+        const {width, height, left, top} = getWorkspace() as fabric.Rect;
+
+        return {
+            name: "Image",
+            format: "png",
+            quality: 1,
+            width,
+            height,
+            left,
+            top
+        }
+    }
+
+    const savePng = () => {
+        const options = generateSaveOptions();
+
+        canvas.setViewportTransform([1,0,0,1,0,0]);
+        const dataUrl = canvas.toDataURL(options);
+
+        downloadFile(dataUrl, "png");
+        autoZoom();
+    }
+
+    const saveSvg = () => {
+        const options = generateSaveOptions();
+
+        canvas.setViewportTransform([1,0,0,1,0,0]);
+        const dataUrl = canvas.toDataURL(options);
+
+        downloadFile(dataUrl, "svg");
+        autoZoom();
+    }
+
+    const saveJpg = () => {
+        const options = generateSaveOptions();
+
+        canvas.setViewportTransform([1,0,0,1,0,0]);
+        const dataUrl = canvas.toDataURL(options);
+
+        downloadFile(dataUrl, "jpg");
+        autoZoom();
+    }
+
+    const saveJson = async () => {
+        const dataUrl = canvas.toJSON(JSON_KEYS);
+
+        await transformText(dataUrl.objects);
+        const fileString = `data:text/json;charset=utf-8,${encodeURIComponent(
+            JSON.stringify(dataUrl, null, "\t"),
+        )}`
+        downloadFile(fileString, "json");
+    }
+
+    const loadJson = (json: string) => {
+        const data = JSON.parse(json);
+
+        canvas.loadFromJSON(data, () => {
+            autoZoom();
+        })
     }
 
     return {
@@ -536,7 +599,12 @@ const buildEditor = ({
         onUndo: () => undo(),
         onRedo: () => redo(),
         canUndo,
-        canRedo
+        canRedo,
+        savePng,
+        saveSvg, 
+        saveJpg,
+        saveJson,
+        loadJson
     };
 }
 
@@ -559,6 +627,8 @@ export const useEditor = ({
     const [fontUnderline, setFontUnderline] = useState(false);
     const [textAlign, setTextAlign] = useState("left");
     const [fontSize, setFontSize] = useState(FONT_SIZE);
+
+    useWindowEvents();
 
     const { 
         save, 
