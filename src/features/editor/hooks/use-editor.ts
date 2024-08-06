@@ -24,6 +24,7 @@ import { useCanvasEvents } from "./use-canvas-events";
 import { createFilter, isTextType } from "../utils";
 import { useClipboard } from "./use-clipboard";
 import { useHistory } from "./use-history";
+import { useHotkeys } from "./use-hotkeys";
 
 const buildEditor = ({
     canvas,
@@ -582,6 +583,15 @@ export const useEditor = ({
         canvas,
         setSelectedObjects,
         clearSelectionCallback,
+        save
+    })
+
+    useHotkeys({
+        canvas,
+        undo,
+        redo,
+        copy,
+        paste,
         save
     })
 
