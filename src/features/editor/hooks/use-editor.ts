@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { fabric } from "fabric";
 import { useAutoResize } from "./use-auto-resize";
 import { 
@@ -26,6 +26,7 @@ import { useClipboard } from "./use-clipboard";
 import { useHistory } from "./use-history";
 import { useHotkeys } from "./use-hotkeys";
 import { useWindowEvents } from "./use-window-events";
+import { useLoadState } from "./use-load-state";
 
 const buildEditor = ({
     canvas,
@@ -609,8 +610,16 @@ const buildEditor = ({
 }
 
 export const useEditor = ({
-    clearSelectionCallback
+    defaultState,
+    defaultHeight,
+    defaultWidth,
+    clearSelectionCallback,
+    saveCallback
 }: EditorHookProps) => {
+    const initialState = useRef(defaultState);
+    const initialWidth = useRef(defaultWidth);
+    const initialHeight = useRef(defaultHeight);
+
     const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
     const [container, setContainer] = useState<HTMLDivElement | null>(null);
     const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
@@ -638,7 +647,10 @@ export const useEditor = ({
         undo,
         canvasHistory,
         setHistoryIndex 
-    } = useHistory({canvas});
+    } = useHistory({
+        canvas,
+        saveCallback
+    });
 
     const {copy, paste} = useClipboard({
         canvas
@@ -664,6 +676,14 @@ export const useEditor = ({
         paste,
         save
     })
+
+    useLoadState({
+        canvas,
+        autoZoom,
+        initialState,
+        canvasHistory,
+        setHistoryIndex,
+      });
 
     const editor = useMemo(() => {
         if(canvas){
@@ -748,8 +768,8 @@ export const useEditor = ({
         });
 
         const initialWorkspace = new fabric.Rect({
-            width: 920,
-            height: 1200,
+            width: initialWidth.current,
+            height: initialHeight.current,
             name: "clip",
             fill: "white",
             selectable: false,

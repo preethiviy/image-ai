@@ -151,10 +151,10 @@ const app = new Hono()
 			"json",
 			projectsInsertSchema
 				.omit({
-				id: true,
-				userId: true,
-				createdAt: true,
-				updatedAt: true,
+					id: true,
+					userId: true,
+					createdAt: true,
+					updatedAt: true,
 				})
 				.partial()
 		),
