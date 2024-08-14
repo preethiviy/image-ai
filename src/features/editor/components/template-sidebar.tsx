@@ -13,6 +13,7 @@ import { ResponseType, useGetTemplates } from "@/features/projects/api/use-get-t
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useConfirm } from "@/hooks/use-confirm";
+import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 
 interface TemplateSidebarProps {
   	editor: Editor | undefined;
@@ -25,6 +26,7 @@ export const TemplateSidebar = ({
   	activeTool,
   	onChangeActiveTool,
 }: TemplateSidebarProps) => {
+	const {shouldBlock, triggerPaywall} = usePaywall();
 
 	const [ConfirmDialog, confirm] = useConfirm(
 		"Are you sure?",
@@ -42,10 +44,15 @@ export const TemplateSidebar = ({
 
 	const onClick = async (template: ResponseType["data"][0]) => {
 
+		if(template.isPro && shouldBlock){
+			triggerPaywall();
+			return;
+		}
+
 		const ok = await confirm();
 
 		if (ok) {
-		editor?.loadJson(template.json);
+			editor?.loadJson(template.json);
 		}
 	};
 
