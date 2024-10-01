@@ -13,7 +13,7 @@ interface EditorProjectIdPageProps {
     }
 }
 
-const EditorProjectIdPage = async ({
+const EditorProjectIdPage = ({
     params
 }: EditorProjectIdPageProps) => {
     const {data, isLoading, isError} = useGetProject(params.projectId);

@@ -15,6 +15,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 export const UserButton = () => {
     const session = useSession();
@@ -24,7 +25,7 @@ export const UserButton = () => {
     }
 
     if (session.status === "unauthenticated" || !session.data) {
-        return null;
+        return <Link href="/sign-in" className="text-sm bg-blue-500 text-white px-3 py-1.5 rounded-md hover:bg-blue-400 transition-all duration-150">Sign in</Link>;
     }
 
     const name = session.data?.user?.name!;
@@ -36,7 +37,7 @@ export const UserButton = () => {
                 <Avatar className="size-10 hover:opcaity-75 transition">
                     <AvatarImage alt={name} src={imageUrl || ""} />
                     <AvatarFallback className="bg-blue-500 font-medium text-white flex items-center justify-center">
-                        {name.charAt(0).toUpperCase()}
+                        {name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
